@@ -49,6 +49,7 @@ alicevision_add_library(vlsift
     ${FEATS} ${FEATS_H}
   PUBLIC_DEFINITIONS
     -DVL_DISABLE_AVX
+    -DVL_DISABLE_SSE2
   PRIVATE_DEFINITIONS
     -DVL_BUILD_DLL
   )

@@ -124,7 +124,15 @@ if(WIN32)
 elseif(APPLE)
    set(VORPALINE_PLATFORM Darwin-clang-dynamic)
 elseif(UNIX)
-   set(VORPALINE_PLATFORM Linux64-gcc-dynamic)
+   if (CMAKE_HOST_SYSTEM_VERSION MATCHES "tegra")
+      # Jetson Nano 2GB.
+      # `uname -a` reports: Linux jetson 4.9.201-tegra #1 SMP PREEMPT Fri Feb 19 08:40:32 PST 2021 aarch64 aarch64 aarch64 GNU/Linux
+      #
+      # Matching on CMAKE_HOST_SYSTEM_VERSION seemed the most convenient/general
+      set(VORPALINE_PLATFORM Jetson-clang-dynamic)
+   else()
+      set(VORPALINE_PLATFORM Linux64-gcc-dynamic)
+   endif()
 endif()
 set(GEOGRAM_TARGET geogram)
 ExternalProject_Add(${GEOGRAM_TARGET}
@@ -135,6 +143,7 @@ ExternalProject_Add(${GEOGRAM_TARGET}
        BUILD_IN_SOURCE 0
        BUILD_ALWAYS 0
        UPDATE_COMMAND ""
+       PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/src/geogram/Jetson-clang.patch
        SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/geogram
        BINARY_DIR ${BUILD_DIR}/geogram_internal_build
        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}

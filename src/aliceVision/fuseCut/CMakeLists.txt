@@ -25,6 +25,9 @@ set(fuseCut_files_sources
 
 alicevision_add_library(aliceVision_fuseCut
   SOURCES ${fuseCut_files_headers} ${fuseCut_files_sources}
+  PUBLIC_DEFINITIONS
+    -DGEO_USE_DEFAULT_SPINLOCK_ARRAY
+    -DGEO_USE_DUMMY_ATOMICS
   PUBLIC_LINKS
     aliceVision_mvsData
     aliceVision_mvsUtils
